@@ -17,6 +17,13 @@ def learning_curve(n):
     plt.savefig("plots/LC%i.png" % n)
     plt.clf()
 
+def final_loss(n):
+    fname = "out/losses_vae%i.pt.pkl" % n
+    with open(fname, "rb") as f:
+        losses = pickle.load(f)
+    losses = list(map(float, losses))
+    return losses[-1]
 
-for k in range(1, 6):
-    learning_curve(k)
+
+for n in range(1, 6):
+    print(n, final_loss(n))
