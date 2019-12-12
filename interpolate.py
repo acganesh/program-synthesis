@@ -1,6 +1,6 @@
 from model import *
 
-vae = torch.load('vae.pt')
+vae = torch.load('vae-pytorch-50000.pt')
 vae.train(False)
 
 TEMPERATURE = 0.01

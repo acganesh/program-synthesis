@@ -5,7 +5,7 @@ import torch.nn.functional as F
 from helpers import *
 
 MIN_LENGTH = 10
-MAX_LENGTH = 50
+MAX_LENGTH = 500
 #MAX_LENGTH = 500
 #MAX_SAMPLE = False
 MAX_SAMPLE = True

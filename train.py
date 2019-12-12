@@ -1,11 +1,12 @@
 import sys
+import pickle
 
 from model import *
 
 hidden_size = 500
 embed_size = 50
 learning_rate = 0.0001
-n_epochs = 10000
+n_epochs = 2500
 grad_clip = 1.0
 
 kld_start_inc = 10000
@@ -69,8 +70,8 @@ save_every = 5000
 
 def save():
     save_filename = sys.argv[2]
-    torch.save(vae, save_filename)
-    with open("losses_%s.p" % save_filename, "rb") as f:
+    torch.save(vae, "out/%s" % save_filename)
+    with open("out/losses_%s.pkl" % save_filename, "wb") as f:
         pickle.dump(losses, f)
     print('Saved as %s' % save_filename)
 
