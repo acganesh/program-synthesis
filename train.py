@@ -5,7 +5,7 @@ from model import *
 hidden_size = 500
 embed_size = 50
 learning_rate = 0.0001
-n_epochs = 100000
+n_epochs = 10000
 grad_clip = 1.0
 
 kld_start_inc = 10000
@@ -19,8 +19,8 @@ temperature_dec = 0.000002
 # Training
 # ------------------------------------------------------------------------------
 
-if len(sys.argv) < 2:
-    print("Usage: python train.py [filename]")
+if len(sys.argv) < 3:
+    print("Usage: python train.py [filename] [checkpoint name]")
     sys.exit(1)
 
 file, file_len = read_file(sys.argv[1])
@@ -68,11 +68,15 @@ log_every = 200
 save_every = 5000
 
 def save():
-    save_filename = 'vae.pt'
+    save_filename = sys.argv[2]
     torch.save(vae, save_filename)
+    with open("losses_%s.p" % save_filename, "rb") as f:
+        pickle.dump(losses, f)
     print('Saved as %s' % save_filename)
 
 try:
+    losses = []
+
     for epoch in range(n_epochs):
         input, target = random_training_set()
 
@@ -96,6 +100,8 @@ try:
         ec = torch.nn.utils.clip_grad_norm(vae.parameters(), grad_clip)
         # print('to  ', next(vae.parameters()).grad.data[0][0])
         optimizer.step()
+
+        losses.append(loss)
 
         if epoch % log_every == 0:
             print('[%d] %.4f (k=%.4f, t=%.4f, kl=%.4f, ec=%.4f)' % (
